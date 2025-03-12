@@ -13,37 +13,47 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 git branch: 'main', url: 'https://github.com/Techgirll12/TASK3.git'
+                sh 'ls -la'  // List files in the workspace root
             }
         }
 
         stage('Build') {
             steps {
-                sh 'mvn clean compile'
+                dir('TASK3') {  // Navigate to the TASK3 directory
+                    sh 'ls -la'  // List files in the TASK3 directory
+                    sh 'mvn clean compile'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                dir('TASK3') {  // Navigate to the TASK3 directory
+                    sh 'mvn test'
+                }
             }
         }
 
         stage('Code Coverage') {
             steps {
-                sh 'mvn verify'
+                dir('TASK3') {  // Navigate to the TASK3 directory
+                    sh 'mvn verify'
+                }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh """
-                    mvn sonar:sonar \
-                    -Dsonar.projectKey=sample_project10 \
-                    -Dsonar.host.url=$SONAR_HOST_URL \
-                    -Dsonar.login=$SONAR_AUTH_TOKEN \
-                    -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-                    """
+                dir('TASK3') {  // Navigate to the TASK3 directory
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=sample_project10 \
+                        -Dsonar.host.url=$SONAR_HOST_URL \
+                        -Dsonar.login=$SONAR_AUTH_TOKEN \
+                        -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                        """
+                    }
                 }
             }
         }
