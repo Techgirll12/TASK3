@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'masin', url: 'https://github.com/Techgirll12/TASK3/blob/main/TASK3.git'
+                git branch: 'main', url: 'https://github.com/Techgirll12/TASK3.git'
             }
         }
 
